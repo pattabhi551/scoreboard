@@ -1,0 +1,89 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-material/paper-material.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="bower-element.html">
+
+<!--
+An element providing a solution to no problem in particular.
+Example:
+    <tpa-component></tpa-component>
+Example:
+    <tpa-component>
+      <h2>Hello tpa-component</h2>
+    </tpa-component>
+@demo demo/index.html
+-->
+<dom-module id="bowler-list">
+  <template>
+    <style is="custom-style">
+      .flex-horizontal-with-ratios {
+        @apply(--layout-horizontal);
+      }
+      .flexchild {
+        @apply(--layout-flex);
+      }
+      .flex2child {
+        @apply(--layout-flex-2);
+        @apply(--layout-end-justified);
+      }
+      .flex4child {
+        @apply(--layout-flex-4);
+      }
+
+      .heading {
+        font-weight: bold;
+      }
+    </style>
+
+    <paper-material elevation="3">
+      <div class="container flex-horizontal-with-ratios heading">
+        <div class="flex4child">Bowler</div>
+        <div class="flex2child">Overs</div>
+        <div class="flex2child">Maidens</div>
+        <div class="flex2child">Runs</div>
+        <div class="flex2child">Wickets</div>
+      </div>
+      <template is="dom-repeat" items="{{bowlerScore}}">
+        <bowler-element score$="{{item}}"></bowler-element>
+      </template>
+    </paper-material>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'bowler-list',
+
+      properties: {
+        score: {
+            type: Array,
+            value: []
+        },
+      },
+      ready: function () {
+        this.bowlerScore = getScores();
+      }
+
+    });
+
+    function getScores() {
+      return [
+        {
+          name: 'Ishant Sharma',
+          overs: 10,
+          maidens: 5,
+          runs: 19,
+          wickets: 4
+        },
+        {
+          name: 'Jasprit Bumrah',
+          overs: 10,
+          maidens: 0,
+          runs: 59,
+          wickets: 2
+        }
+      ];
+    }
+  </script>
+</dom-module>
