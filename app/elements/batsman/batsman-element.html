@@ -15,28 +15,16 @@ Example:
 -->
 <dom-module id="batsman-element">
   <template>
-    <style is="custom-style">
-      .flex-horizontal-with-ratios {
-        @apply(--layout-horizontal);
-      }
-      .flexchild {
-        @apply(--layout-flex);
-      }
-      .flex2child {
-        @apply(--layout-flex-2);
-        @apply(--layout-end-justified);
-      }
-      .flex4child {
-        @apply(--layout-flex-4);
-      }
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
+
     </style>
 
-    <div class="container flex-horizontal-with-ratios">
-      <div class="flex4child"><b>{{score.name}}</b></div>
-      <div class="flex2child">{{score.runs}}</div>
-      <div class="flex2child">{{score.balls}}</div>
-      <div class="flex2child">{{score.fours}}</div>
-      <div class="flex2child">{{score.sixes}}</div>
+    <div class="layout horizontal flex">
+      <div class="flex-4"><b>{{score.name}}</b></div>
+      <div class="flex-2">{{score.runs}}</div>
+      <div class="flex-2">{{score.balls}}</div>
+      <div class="flex-2">{{score.fours}}</div>
+      <div class="flex-2">{{score.sixes}}</div>
     </div>
   </template>
 
