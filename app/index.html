@@ -58,7 +58,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles iron-flex iron-flex-alignment">
     paper-tabs {
-      background-color: var(--paper-blue-900);
+      background-color: rgb(63, 81, 181);
       color: white;
     }
 
@@ -83,19 +83,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
+          <a data-route="LiveScores" href="{{baseUrl}}">
             <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
+            <span>Live Score</span>
           </a>
 
-          <a data-route="users" href="{{baseUrl}}users">
-            <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
+          <a data-route="EditScore" href="{{baseUrl}}score">
+            <iron-icon icon="assignment"></iron-icon>
+            <span>Edit Score</span>
           </a>
 
-          <a data-route="contact" href="{{baseUrl}}contact">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
+          <a data-route="CreateTeam" href="{{baseUrl}}team">
+            <iron-icon icon="create"></iron-icon>
+            <span>Create Team</span>
           </a>
         </paper-menu>
       </paper-scroll-header-panel>
@@ -135,7 +135,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <bowler-list></bowler-list>
             </section>
 
-            <section data-route="users">
+            <section data-route="score">
               <paper-material elevation="1">
                 <input-score></input-score>
               </paper-material>
@@ -148,10 +148,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="contact">
+            <section data-route="team">
               <paper-material elevation="1">
-                <h2 class="page-title">Contact</h2>
-                <p>This is the contact section</p>
+                <h2 class="page-title">Create Team</h2>
+                <team-element></team-element>
               </paper-material>
             </section>
           </iron-pages>
