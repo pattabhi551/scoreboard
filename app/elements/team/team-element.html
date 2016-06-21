@@ -10,29 +10,41 @@ Example:
 -->
 <dom-module id="team-element">
   <template>
-    <style is="custom-style">
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
       paper-button {
         background-color: var(--light-primary-color);
       }
     </style>
 
-    <paper-button id="createTeam"> Create Team from Scratch</paper-button>
+    <div class="layout horizontal flex center">
+      <paper-input class="flex-4" label="Player Name"></paper-input>
+      <div class="flex-1"></div>
+      <paper-dropdown-menu label="Speciality" class="flex-2">
+        <paper-listbox class="dropdown-content">
+          <paper-item>Batsman</paper-item>
+          <paper-item>Bowler</paper-item>
+          <paper-item>All-rounder</paper-item>
+          <paper-item>Wicket-Keeper</paper-item>
+        </paper-listbox>
+      </paper-dropdown-menu>
+      <div class="flex-6"></div>
+    </div>
+
+    <!--<paper-element>
+      <div class="layout horizontal wrap">
+        <span>Name</span>
+        <span>bat</span>
+        <span>bowl</span>
+        <span>WK</span>
+        <span>cap</span>
+      </div>
+    </paper-element>-->
+
   </template>
 
   <script>
     Polymer({
-
-      is: 'team-element',
-
-      listeners: {
-        'createTeam.onTap': 'showTeamList'
-      },
-
-      showTeamList: function() {
-
-      }
-
-
+      is: 'team-element'
     });
   </script>
 </dom-module>
