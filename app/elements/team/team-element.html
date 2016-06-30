@@ -15,36 +15,35 @@ Example:
         background-color: var(--light-primary-color);
       }
     </style>
+    <h2 class="page-title">Create Team</h2>
 
-    <div class="layout horizontal flex center">
-      <paper-input class="flex-4" label="Player Name"></paper-input>
-      <div class="flex-1"></div>
-      <paper-dropdown-menu label="Speciality" class="flex-2">
-        <paper-listbox class="dropdown-content">
-          <paper-item>Batsman</paper-item>
-          <paper-item>Bowler</paper-item>
-          <paper-item>All-rounder</paper-item>
-          <paper-item>Wicket-Keeper</paper-item>
-        </paper-listbox>
-      </paper-dropdown-menu>
-      <div class="flex-6"></div>
-    </div>
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+                  database-url="https://scoreboard-a046c.firebaseio.com"
+                  api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
+    </firebase-app>
+    <firebase-query
+      id="query"
+      app-name="scoreboard-a046c"
+      path="/team"
+      data="{{data}}">
+    </firebase-query>
+    {{data}}
 
-    <!--<paper-element>
-      <div class="layout horizontal wrap">
-        <span>Name</span>
-        <span>bat</span>
-        <span>bowl</span>
-        <span>WK</span>
-        <span>cap</span>
-      </div>
-    </paper-element>-->
+    <paper-input-container>
+      <input is="iron-input" />
+      <label>Enter team name</label>
+      <paper-icon-button icon="save" labe="save" suffix></paper-icon-button>
+    </paper-input-container>
 
+    <player-element></player-element>
   </template>
 
   <script>
     Polymer({
-      is: 'team-element'
+      is: 'team-element',
+      ready: function() {
+        console.log('team is ', this.data);
+      }
     });
   </script>
 </dom-module>

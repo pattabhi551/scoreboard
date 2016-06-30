@@ -1,0 +1,43 @@
+<!--
+An element providing a solution to no problem in particular.
+Example:
+    <tpa-component></tpa-component>
+Example:
+    <tpa-component>
+      <h2>Hello tpa-component</h2>
+    </tpa-component>
+@demo demo/index.html
+-->
+<dom-module id="player-element">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
+      paper-button {
+        background-color: var(--light-primary-color);
+      }
+    </style>
+
+    <div class="layout horizontal flex center">
+        <paper-input label="Player Name" class="flex-4"></paper-input>
+        <div class="flex-1"></div>
+        <paper-dropdown-menu label="Speciality" class="flex-4">
+          <paper-listbox class="dropdown-content">
+            <paper-item>Batsman</paper-item>
+            <paper-item>Bowler</paper-item>
+            <paper-item>All-rounder</paper-item>
+            <paper-item>Wicket-Keeper</paper-item>
+          </paper-listbox>
+        </paper-dropdown-menu>
+        <div suffix>
+          <paper-icon-button icon="save" label="save"></paper-icon-button>
+          <paper-icon-button icon="cancel" label="cancel"></paper-icon-button>
+        </div>
+    </div>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'player-element'
+    });
+  </script>
+</dom-module>
