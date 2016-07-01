@@ -17,7 +17,15 @@ Example:
     </style>
     <h2 class="page-title">Create Team</h2>
 
-    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+    <firebase-app auth-domain="polymerfire-test.firebaseapp.com"
+                  database-url="https://polymerfire-test.firebaseio.com/"
+                  api-key="AIzaSyDTP-eiQezleFsV2WddFBAhF_WEzx_8v_g">
+    </firebase-app>
+    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
+    </firebase-auth>
+
+
+    <!--<firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
                   database-url="https://scoreboard-a046c.firebaseio.com"
                   api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
@@ -26,8 +34,16 @@ Example:
       app-name="scoreboard-a046c"
       path="/team"
       data="{{data}}">
+    </firebase-query>-->
+
+    <firebase-query
+      id="query"
+      app-name="scoreboard-a046c"
+      path="/team"
+      data="{{data}}">
     </firebase-query>
-    {{data}}
+
+    Data is {{data}}
 
     <paper-input-container>
       <input is="iron-input" />
