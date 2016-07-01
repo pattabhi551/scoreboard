@@ -17,33 +17,18 @@ Example:
     </style>
     <h2 class="page-title">Create Team</h2>
 
-    <firebase-app auth-domain="polymerfire-test.firebaseapp.com"
-                  database-url="https://polymerfire-test.firebaseio.com/"
-                  api-key="AIzaSyDTP-eiQezleFsV2WddFBAhF_WEzx_8v_g">
-    </firebase-app>
-    <firebase-auth id="auth" user="{{user}}" provider="google" on-error="handleError">
-    </firebase-auth>
-
-
-    <!--<firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
                   database-url="https://scoreboard-a046c.firebaseio.com"
                   api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
-    <firebase-query
-      id="query"
-      app-name="scoreboard-a046c"
+    <firebase-auth id="auth">
+    </firebase-auth>
+    <firebase-document
       path="/team"
       data="{{data}}">
-    </firebase-query>-->
+    </firebase-document>
 
-    <firebase-query
-      id="query"
-      app-name="scoreboard-a046c"
-      path="/team"
-      data="{{data}}">
-    </firebase-query>
-
-    Data is {{data}}
+    Data is {{data.name}}
 
     <paper-input-container>
       <input is="iron-input" />
@@ -57,8 +42,11 @@ Example:
   <script>
     Polymer({
       is: 'team-element',
-      ready: function() {
-        console.log('team is ', this.data);
+      attached: function() {
+        this.$.auth.signInAnonymously().then(function() {
+          console.log('logged in successfully');
+          console.log('team is ', this.data);
+        });
       }
     });
   </script>
