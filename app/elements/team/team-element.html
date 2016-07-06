@@ -14,6 +14,16 @@ Example:
       paper-button {
         background-color: var(--light-primary-color);
       }
+
+      .content .row-action{
+        background-color:white;
+        display:none;
+      }
+
+      .content:hover .row-action {
+        display:block;
+      }
+
     </style>
     <h2 class="page-title">Create Team</h2>
 
@@ -30,13 +40,17 @@ Example:
 
     Data is {{data.name}}
 
-    <paper-input-container>
+    <paper-input-container content class="content">
       <input is="iron-input" />
       <label>Enter team name</label>
-      <paper-icon-button icon="save" labe="save" suffix></paper-icon-button>
+      <div id="row-action" class="row-action" suffix>
+        <paper-icon-button icon="create" label="edit"></paper-icon-button>
+        <paper-icon-button icon="save" label="save"></paper-icon-button>
+      </div>
     </paper-input-container>
 
     <player-element></player-element>
+    <paper-fab icon="icons:add" on-tap="postTask" mini></paper-fab>
   </template>
 
   <script>
