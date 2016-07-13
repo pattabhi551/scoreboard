@@ -1,0 +1,11 @@
+{
+  "team" : {
+    "name" : "Quivive Team 4",
+    "players": [
+      {
+        "name": "Pattabhi Ponugupati",
+        "speciality": "Batsman"
+      }
+    ]
+  }
+}

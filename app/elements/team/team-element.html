@@ -27,7 +27,7 @@ Example:
     </style>
     <h2 class="page-title">Create Team</h2>
 
-    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+    <!--<firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
                   database-url="https://scoreboard-a046c.firebaseio.com"
                   api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
@@ -36,7 +36,7 @@ Example:
     <firebase-document
       path="/team"
       data="{{data}}">
-    </firebase-document>
+    </firebase-document>-->
 
     Data is {{data.name}}
 
@@ -49,18 +49,30 @@ Example:
       </div>
     </paper-input-container>
 
-    <player-element></player-element>
+    {{player.name}}
+
+    <player-element player$="{{player}}"></player-element>
     <paper-fab icon="icons:add" on-tap="postTask" mini></paper-fab>
   </template>
 
   <script>
     Polymer({
       is: 'team-element',
+      properties: {
+        player: {
+          type: Object,
+          value: {
+            name: "Pattabhi Ponugupati",
+            speciality: "Batsman"
+          },
+          notify: true
+        }
+      },
       attached: function() {
-        this.$.auth.signInAnonymously().then(function() {
+       /* this.$.auth.signInAnonymously().then(function() {
           console.log('logged in successfully');
           console.log('team is ', this.data);
-        });
+        });*/
       }
     });
   </script>

@@ -17,9 +17,9 @@ Example:
     </style>
 
     <div class="layout horizontal flex center">
-        <paper-input label="Player Name" class="flex-4"></paper-input>
+        <paper-input label="Player Name" class="flex-4">{{player.name}}</paper-input>
         <div class="flex-1"></div>
-        <paper-dropdown-menu label="Speciality" class="flex-4">
+        <paper-dropdown-menu label="Speciality" class="flex-4" selected="{{player.speciality}}">
           <paper-listbox class="dropdown-content">
             <paper-item>Batsman</paper-item>
             <paper-item>Bowler</paper-item>
@@ -37,7 +37,14 @@ Example:
 
   <script>
     Polymer({
-      is: 'player-element'
+      is: 'player-element',
+      properties: {
+        player: {
+          type: Object,
+          value: function () { return {}; },
+          notify: true
+        }
+      }
     });
   </script>
 </dom-module>

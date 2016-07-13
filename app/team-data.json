@@ -1,10 +1,21 @@
 {
   "team" : {
-    "name" : "Quivive Team 4",
+    "name": "Quivive Team 4",
     "players": [
       {
         "name": "Pattabhi Ponugupati",
         "speciality": "Batsman"
+      }
+    ],
+    "fixtures": [
+      {
+        "name": "match_1",
+        "score": {
+          "runs": 0,
+          "overs": 0,
+          "wickets": 0,
+          "balls": 0
+        }
       }
     ]
   }

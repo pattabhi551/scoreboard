@@ -118,21 +118,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </div>
         </paper-toolbar>
 
-        <!-- Toolbar icons -->
-        <paper-tabs selected="0" scrollable>
-          <paper-tab>Royal Challengers Bangalore</paper-tab>
-          <paper-tab>Delhi Daredevils</paper-tab>
-        </paper-tabs>
-
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="home">
-              <h2>Batting</h2>
+              <score-element></score-element>
+              <!--<h2>Batting</h2>
               <batsman-list></batsman-list>
 
               <h2>Bowling</h2>
-              <bowler-list></bowler-list>
+              <bowler-list></bowler-list>-->
             </section>
 
             <section data-route="score">
