@@ -25603,12 +25603,11 @@ module.exports = Array.isArray || function (arr) {
 
     // Middleware
     function scrollToTop(ctx, next) {
-      app.scrollPageToTop();
+     // app.scrollPageToTop();
       next();
     }
 
     function closeDrawer(ctx, next) {
-      app.closeDrawer();
       next();
     }
 
@@ -26213,12 +26212,7 @@ module.exports = Array.isArray || function (arr) {
     </style>
     <h2 class="page-title">Create Team</h2>
 
-    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com" database-url="https://scoreboard-a046c.firebaseio.com" api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
-    </firebase-app>
-    <firebase-auth id="auth">
-    </firebase-auth>
-    <firebase-document path="/team" data="{{data}}">
-    </firebase-document>
+    
 
     Data is {{data.name}}
 
@@ -26251,10 +26245,10 @@ module.exports = Array.isArray || function (arr) {
         }
       },
       attached: function() {
-        this.$.auth.signInAnonymously().then(function() {
+       /* this.$.auth.signInAnonymously().then(function() {
           console.log('logged in successfully');
           console.log('team is ', this.data);
-        });
+        });*/
       }
     });
   </script>
@@ -26305,12 +26299,21 @@ module.exports = Array.isArray || function (arr) {
 
     </style>
 
-    <div class="layout horizontal flex">
-      <paper-input type="number" value="{{score.runs}}" class="flex-2" label="runs"></paper-input>
-      <paper-input type="number" value="{{score.overs}}" class="flex-2" min="0" max="60" label="overs"></paper-input>
-      <paper-input type="number" value="{{score.balls}}" class="flex-2" min="0" max="6" label="balls"></paper-input>
-      <paper-input type="number" value="{{score.wickets}}" class="flex-2" min="0" max="11" label="wickets"></paper-input>
-    </div>
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com" database-url="https://scoreboard-a046c.firebaseio.com" api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
+    </firebase-app>
+    <firebase-auth id="auth">
+    </firebase-auth>
+    <firebase-document path="/team" data="{{data}}">
+    </firebase-document>
+
+    <template is="dom-repeat" items="{{data.fixtures}}">
+      <div class="layout horizontal flex">
+        <paper-input type="number" value="{{item.score.runs}}" class="flex-2" label="runs"></paper-input>
+        <paper-input type="number" value="{{item.score.overs}}" class="flex-2" min="0" max="60" label="overs"></paper-input>
+        <paper-input type="number" value="{{item.score.balls}}" class="flex-2" min="0" max="6" label="balls"></paper-input>
+        <paper-input type="number" value="{{item.score.wickets}}" class="flex-2" min="0" max="11" label="wickets"></paper-input>
+      </div>
+    </template>
   </template>
 
   <script>
@@ -26330,6 +26333,60 @@ module.exports = Array.isArray || function (arr) {
           notify: false
         }
       },
+      attached: function() {
+         this.$.auth.signInAnonymously().then(function() {
+         console.log('logged in successfully');
+         console.log('team is ', this.data);
+         });
+      }
+    });
+  </script>
+</dom-module>
+<dom-module id="score-view-element" assetpath="score/">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
+
+    </style>
+
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com" database-url="https://scoreboard-a046c.firebaseio.com" api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo" name="scoreView">
+    </firebase-app>
+    <firebase-auth id="auth" app-name="scoreView">
+    </firebase-auth>
+    <firebase-document path="/team" data="{{data}}" app-name="scoreView">
+    </firebase-document>
+
+    <template is="dom-repeat" items="{{data.fixtures}}">
+      <div class="layout horizontal flex">
+        <h2 class="flex-2"> Runs {{item.score.runs}}</h2>
+        <h2 class="flex-2"> Overs {{item.score.overs}}</h2>
+        <h2 class="flex-2"> Wickets {{item.score.wickets}}</h2>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'score-view-element',
+
+      properties: {
+        score: {
+          type: Object,
+          value: {
+            runs: 300,
+            overs: 50,
+            balls: 4,
+            wickets: 6
+          },
+          notify: false
+        }
+      },
+      attached: function() {
+         this.$.auth.signInAnonymously().then(function() {
+         console.log('logged in successfully');
+         console.log('team is ', this.data);
+         });
+      }
     });
   </script>
 </dom-module>

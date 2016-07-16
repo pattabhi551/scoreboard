@@ -1,0 +1,65 @@
+
+<!--
+An element providing a solution to no problem in particular.
+Example:
+    <tpa-component></tpa-component>
+Example:
+    <tpa-component>
+      <h2>Hello tpa-component</h2>
+    </tpa-component>
+@demo demo/index.html
+-->
+<dom-module id="score-view-element">
+  <template>
+    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
+
+    </style>
+
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+                  database-url="https://scoreboard-a046c.firebaseio.com"
+                  api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo"
+                  name="scoreView">
+    </firebase-app>
+    <firebase-auth id="auth" app-name="scoreView">
+    </firebase-auth>
+    <firebase-document
+      path="/team"
+      data="{{data}}"
+      app-name="scoreView">
+    </firebase-document>
+
+    <template is="dom-repeat" items="{{data.fixtures}}">
+      <div class="layout horizontal flex">
+        <h2 class="flex-4"> Runs {{item.score.runs}}</h2>
+        <h2 class="flex-4"> Overs {{item.score.overs}}</h2>
+        <h2 class="flex-4"> Wickets {{item.score.wickets}}</h2>
+      </div>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'score-view-element',
+
+      properties: {
+        score: {
+          type: Object,
+          value: {
+            runs: 300,
+            overs: 50,
+            balls: 4,
+            wickets: 6
+          },
+          notify: false
+        }
+      },
+      attached: function() {
+         this.$.auth.signInAnonymously().then(function() {
+         console.log('logged in successfully');
+         console.log('team is ', this.data);
+         });
+      }
+    });
+  </script>
+</dom-module>
