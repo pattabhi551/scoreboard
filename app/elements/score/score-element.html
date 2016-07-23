@@ -36,15 +36,18 @@ Example:
         <div class="layout horizontal flex wrap">
           <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
           <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-          <paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
+          <!--<paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>-->
           <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
+        </div>
+        <div>
+          <paper-input class="flex-3" type="number" value="{{item.score.target}}" min="0" max="11" label="Target" maxlength="10"></paper-input>
         </div>
       </template>
       <template is="dom-if" if ="{{!wide}}">
         <div class="layout vertical flex" style="height:100vh">
           <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
           <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-          <paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
+          <!--<paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>-->
           <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
         </div>
       </template>

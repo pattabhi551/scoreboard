@@ -26306,14 +26306,30 @@ module.exports = Array.isArray || function (arr) {
     </firebase-auth>
     <firebase-document path="/team" data="{{data}}">
     </firebase-document>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
 
     <template is="dom-repeat" items="{{data.fixtures}}">
-      <div class="layout horizontal around-justified wrap">
-        <h3>Runs {{item.score.runs}}</h3>
-        <h3>Overs {{item.score.overs}}</h3>
-        <h3>Balls {{item.score.balls}}</h3>
-        <h3>Wickets {{item.score.wickets}}</h3>
-      </div>
+      <template is="dom-if" if="{{wide}}">
+        <paper-card>
+          <div class="card-content layout horizontal center-justified">
+            <h3> Target - {{item.score.target}}</h3>
+          </div>
+        </paper-card>
+        <div class="layout horizontal around-justified wrap">
+          <h3>Runs {{item.score.runs}}</h3>
+          <h3>Overs {{item.score.overs}}</h3>
+          
+          <h3>Wickets {{item.score.wickets}}</h3>
+        </div>
+      </template>
+      <template is="dom-if" if="{{!wide}}">
+        <div class="layout vertical" style="height: 100vh">
+          <h3 class="flex-3">Runs {{item.score.runs}}</h3>
+          <h3 class="flex-3">Overs {{item.score.overs}}</h3>
+          
+          <h3 class="flex-3">Wickets {{item.score.wickets}}</h3>
+        </div>
+      </template>
     </template>
   </template>
 
@@ -26353,18 +26369,32 @@ module.exports = Array.isArray || function (arr) {
 
     <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com" name="scoreboard" database-url="https://scoreboard-a046c.firebaseio.com" api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
     <firebase-auth id="auth" app-name="scoreboard">
     </firebase-auth>
     <firebase-document path="/team" app-name="scoreboard" data="{{data}}">
     </firebase-document>
 
     <template is="dom-repeat" items="{{data.fixtures}}">
-      <div class="layout horizontal flex wrap">
-        <paper-input class="flex-3" type="number" value="{{item.score.runs}}" char-counter="" label="runs" maxlength="5"></paper-input>
-        <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-        <paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
-        <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
-      </div>
+      <template is="dom-if" if="{{wide}}">
+        <div class="layout horizontal flex wrap">
+          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+          
+          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
+        </div>
+        <div>
+          <paper-input class="flex-3" type="number" value="{{item.score.target}}" min="0" max="11" label="Target" maxlength="10"></paper-input>
+        </div>
+      </template>
+      <template is="dom-if" if="{{!wide}}">
+        <div class="layout vertical flex" style="height:100vh">
+          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+          
+          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
+        </div>
+      </template>
     </template>
   </template>
 

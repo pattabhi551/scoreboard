@@ -29,19 +29,24 @@ Example:
 
     <template is="dom-repeat" items="{{data.fixtures}}">
       <template is="dom-if" if="{{wide}}">
+        <paper-card>
+          <div class="card-content layout horizontal center-justified">
+            <h3> Target - {{item.score.target}}</h3>
+          </div>
+        </paper-card>
         <div class="layout horizontal around-justified wrap">
           <h3>Runs {{item.score.runs}}</h3>
           <h3>Overs {{item.score.overs}}</h3>
-          <h3>Balls {{item.score.balls}}</h3>
+          <!--<h3>Balls {{item.score.balls}}</h3>-->
           <h3>Wickets {{item.score.wickets}}</h3>
         </div>
       </template>
       <template is="dom-if" if="{{!wide}}">
-        <div class="layout vertical fit" style="height: 100vh">
-          <h3>Runs {{item.score.runs}}</h3>
-          <h3>Overs {{item.score.overs}}</h3>
-          <h3>Balls {{item.score.balls}}</h3>
-          <h3>Wickets {{item.score.wickets}}</h3>
+        <div class="layout vertical" style="height: 100vh">
+          <h3 class="flex-3">Runs {{item.score.runs}}</h3>
+          <h3 class="flex-3">Overs {{item.score.overs}}</h3>
+          <!--<h3>Balls {{item.score.balls}}</h3>-->
+          <h3 class="flex-3">Wickets {{item.score.wickets}}</h3>
         </div>
       </template>
     </template>
