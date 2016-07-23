@@ -22,6 +22,7 @@ Example:
                   database-url="https://scoreboard-a046c.firebaseio.com"
                   api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
     <firebase-auth id="auth" app-name="scoreboard">
     </firebase-auth>
     <firebase-document
@@ -31,12 +32,22 @@ Example:
     </firebase-document>
 
     <template is="dom-repeat" items="{{data.fixtures}}">
-      <div class="layout horizontal flex wrap">
-        <paper-input class="flex-3" type="number" value="{{item.score.runs}}" char-counter label="runs" maxlength="5"></paper-input>
-        <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-        <paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
-        <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
-      </div>
+      <template is="dom-if" if="{{wide}}">
+        <div class="layout horizontal flex wrap">
+          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
+        </div>
+      </template>
+      <template is="dom-if" if ="{{!wide}}">
+        <div class="layout vertical flex" style="height:100vh">
+          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
+          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
+        </div>
+      </template>
     </template>
   </template>
 

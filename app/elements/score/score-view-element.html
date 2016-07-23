@@ -25,14 +25,25 @@ Example:
       path="/team"
       data="{{data}}">
     </firebase-document>
+    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
 
     <template is="dom-repeat" items="{{data.fixtures}}">
-      <div class="layout horizontal around-justified wrap">
-        <h3>Runs {{item.score.runs}}</h3>
-        <h3>Overs {{item.score.overs}}</h3>
-        <h3>Balls {{item.score.balls}}</h3>
-        <h3>Wickets {{item.score.wickets}}</h3>
-      </div>
+      <template is="dom-if" if="{{wide}}">
+        <div class="layout horizontal around-justified wrap">
+          <h3>Runs {{item.score.runs}}</h3>
+          <h3>Overs {{item.score.overs}}</h3>
+          <h3>Balls {{item.score.balls}}</h3>
+          <h3>Wickets {{item.score.wickets}}</h3>
+        </div>
+      </template>
+      <template is="dom-if" if="{{!wide}}">
+        <div class="layout vertical fit" style="height: 100vh">
+          <h3>Runs {{item.score.runs}}</h3>
+          <h3>Overs {{item.score.overs}}</h3>
+          <h3>Balls {{item.score.balls}}</h3>
+          <h3>Wickets {{item.score.wickets}}</h3>
+        </div>
+      </template>
     </template>
   </template>
 
