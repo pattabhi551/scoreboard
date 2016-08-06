@@ -12656,6 +12656,331 @@ this.fire('dom-change');
 </script>
 <script>
 
+  /** @polymerBehavior Polymer.PaperButtonBehavior */
+  Polymer.PaperButtonBehaviorImpl = {
+
+    properties: {
+
+      /**
+       * The z-depth of this element, from 0-5. Setting to 0 will remove the
+       * shadow, and each increasing number greater than 0 will be "deeper"
+       * than the last.
+       *
+       * @attribute elevation
+       * @type number
+       * @default 1
+       */
+      elevation: {
+        type: Number,
+        reflectToAttribute: true,
+        readOnly: true
+      }
+
+    },
+
+    observers: [
+      '_calculateElevation(focused, disabled, active, pressed, receivedFocusFromKeyboard)',
+      '_computeKeyboardClass(receivedFocusFromKeyboard)'
+    ],
+
+    hostAttributes: {
+      role: 'button',
+      tabindex: '0',
+      animated: true
+    },
+
+    _calculateElevation: function() {
+      var e = 1;
+      if (this.disabled) {
+        e = 0;
+      } else if (this.active || this.pressed) {
+        e = 4;
+      } else if (this.receivedFocusFromKeyboard) {
+        e = 3;
+      }
+      this._setElevation(e);
+    },
+
+    _computeKeyboardClass: function(receivedFocusFromKeyboard) {
+      this.toggleClass('keyboard-focus', receivedFocusFromKeyboard);
+    },
+
+    /**
+     * In addition to `IronButtonState` behavior, when space key goes down,
+     * create a ripple down effect.
+     *
+     * @param {!KeyboardEvent} event .
+     */
+    _spaceKeyDownHandler: function(event) {
+      Polymer.IronButtonStateImpl._spaceKeyDownHandler.call(this, event);
+      // Ensure that there is at most one ripple when the space key is held down.
+      if (this.hasRipple() && this.getRipple().ripples.length < 1) {
+        this._ripple.uiDownAction();
+      }
+    },
+
+    /**
+     * In addition to `IronButtonState` behavior, when space key goes up,
+     * create a ripple up effect.
+     *
+     * @param {!KeyboardEvent} event .
+     */
+    _spaceKeyUpHandler: function(event) {
+      Polymer.IronButtonStateImpl._spaceKeyUpHandler.call(this, event);
+      if (this.hasRipple()) {
+        this._ripple.uiUpAction();
+      }
+    }
+
+  };
+
+  /** @polymerBehavior */
+  Polymer.PaperButtonBehavior = [
+    Polymer.IronButtonState,
+    Polymer.IronControlState,
+    Polymer.PaperRippleBehavior,
+    Polymer.PaperButtonBehaviorImpl
+  ];
+
+</script>
+<style is="custom-style">
+
+  :root {
+
+    --shadow-transition: {
+      transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    };
+
+    --shadow-none: {
+      box-shadow: none;
+    };
+
+    /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
+
+    --shadow-elevation-2dp: {
+      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    };
+
+    --shadow-elevation-3dp: {
+      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-4dp: {
+      box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-6dp: {
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-8dp: {
+      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
+                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-12dp: {
+      box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),
+                  0 4px 22px 3px rgba(0, 0, 0, 0.12),
+                  0 6px 7px -4px rgba(0, 0, 0, 0.4);
+    };
+
+    --shadow-elevation-16dp: {
+      box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
+                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
+                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
+    };
+
+  }
+
+</style>
+<dom-module id="paper-material-shared-styles" assetpath="../bower_components/paper-material/">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+      }
+
+      :host([elevation="1"]) {
+        @apply(--shadow-elevation-2dp);
+      }
+
+      :host([elevation="2"]) {
+        @apply(--shadow-elevation-4dp);
+      }
+
+      :host([elevation="3"]) {
+        @apply(--shadow-elevation-6dp);
+      }
+
+      :host([elevation="4"]) {
+        @apply(--shadow-elevation-8dp);
+      }
+
+      :host([elevation="5"]) {
+        @apply(--shadow-elevation-16dp);
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="paper-material" assetpath="../bower_components/paper-material/">
+  <template>
+    <style include="paper-material-shared-styles"></style>
+    <style>
+      :host([animated]) {
+        @apply(--shadow-transition);
+      }
+    </style>
+
+    <content></content>
+  </template>
+</dom-module>
+<script>
+  Polymer({
+    is: 'paper-material',
+
+    properties: {
+      /**
+       * The z-depth of this element, from 0-5. Setting to 0 will remove the
+       * shadow, and each increasing number greater than 0 will be "deeper"
+       * than the last.
+       *
+       * @attribute elevation
+       * @type number
+       * @default 1
+       */
+      elevation: {
+        type: Number,
+        reflectToAttribute: true,
+        value: 1
+      },
+
+      /**
+       * Set this to true to animate the shadow when setting a new
+       * `elevation` value.
+       *
+       * @attribute animated
+       * @type boolean
+       * @default false
+       */
+      animated: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      }
+    }
+  });
+</script>
+
+
+<dom-module id="paper-button" assetpath="../bower_components/paper-button/">
+  <template strip-whitespace="">
+    <style include="paper-material">
+      :host {
+        @apply(--layout-inline);
+        @apply(--layout-center-center);
+        position: relative;
+        box-sizing: border-box;
+        min-width: 5.14em;
+        margin: 0 0.29em;
+        background: transparent;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-tap-highlight-color: transparent;
+        font: inherit;
+        text-transform: uppercase;
+        outline-width: 0;
+        border-radius: 3px;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: pointer;
+        z-index: 0;
+        padding: 0.7em 0.57em;
+
+        @apply(--paper-font-common-base);
+        @apply(--paper-button);
+      }
+
+      :host([raised].keyboard-focus) {
+        font-weight: bold;
+        @apply(--paper-button-raised-keyboard-focus);
+      }
+
+      :host(:not([raised]).keyboard-focus) {
+        font-weight: bold;
+        @apply(--paper-button-flat-keyboard-focus);
+      }
+
+      :host([disabled]) {
+        background: #eaeaea;
+        color: #a8a8a8;
+        cursor: auto;
+        pointer-events: none;
+
+        @apply(--paper-button-disabled);
+      }
+
+      paper-ripple {
+        color: var(--paper-button-ink-color);
+      }
+    </style>
+
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'paper-button',
+
+      behaviors: [
+        Polymer.PaperButtonBehavior
+      ],
+
+      properties: {
+        /**
+         * If true, the button should be styled with a shadow.
+         */
+        raised: {
+          type: Boolean,
+          reflectToAttribute: true,
+          value: false,
+          observer: '_calculateElevation'
+        }
+      },
+
+      _calculateElevation: function() {
+        if (!this.raised) {
+          this._setElevation(0);
+        } else {
+          Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
+        }
+      }
+
+      /**
+      Fired when the animation finishes.
+      This is useful if you want to wait until
+      the ripple animation finishes to perform some action.
+
+      @event transitionend
+      Event param: {{node: Object}} detail Contains the animated node.
+      */
+    });
+  </script>
+</dom-module>
+<script>
+
   /**
    * `Polymer.PaperInkyFocusBehavior` implements a ripple when the element has keyboard focus.
    *
@@ -13442,145 +13767,6 @@ this.fire('dom-change');
     });
   </script>
 </dom-module>
-<style is="custom-style">
-
-  :root {
-
-    --shadow-transition: {
-      transition: box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    };
-
-    --shadow-none: {
-      box-shadow: none;
-    };
-
-    /* from http://codepen.io/shyndman/pen/c5394ddf2e8b2a5c9185904b57421cdb */
-
-    --shadow-elevation-2dp: {
-      box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 1px -2px rgba(0, 0, 0, 0.2);
-    };
-
-    --shadow-elevation-3dp: {
-      box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 8px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 3px -2px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-4dp: {
-      box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                  0 2px 4px -1px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-6dp: {
-      box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                  0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                  0 3px 5px -1px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-8dp: {
-      box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
-                  0 3px 14px 2px rgba(0, 0, 0, 0.12),
-                  0 5px 5px -3px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-12dp: {
-      box-shadow: 0 12px 16px 1px rgba(0, 0, 0, 0.14),
-                  0 4px 22px 3px rgba(0, 0, 0, 0.12),
-                  0 6px 7px -4px rgba(0, 0, 0, 0.4);
-    };
-
-    --shadow-elevation-16dp: {
-      box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
-                  0  6px 30px 5px rgba(0, 0, 0, 0.12),
-                  0  8px 10px -5px rgba(0, 0, 0, 0.4);
-    };
-
-  }
-
-</style>
-<dom-module id="paper-material-shared-styles" assetpath="../bower_components/paper-material/">
-  <template>
-    <style>
-      :host {
-        display: block;
-        position: relative;
-      }
-
-      :host([elevation="1"]) {
-        @apply(--shadow-elevation-2dp);
-      }
-
-      :host([elevation="2"]) {
-        @apply(--shadow-elevation-4dp);
-      }
-
-      :host([elevation="3"]) {
-        @apply(--shadow-elevation-6dp);
-      }
-
-      :host([elevation="4"]) {
-        @apply(--shadow-elevation-8dp);
-      }
-
-      :host([elevation="5"]) {
-        @apply(--shadow-elevation-16dp);
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="paper-material" assetpath="../bower_components/paper-material/">
-  <template>
-    <style include="paper-material-shared-styles"></style>
-    <style>
-      :host([animated]) {
-        @apply(--shadow-transition);
-      }
-    </style>
-
-    <content></content>
-  </template>
-</dom-module>
-<script>
-  Polymer({
-    is: 'paper-material',
-
-    properties: {
-      /**
-       * The z-depth of this element, from 0-5. Setting to 0 will remove the
-       * shadow, and each increasing number greater than 0 will be "deeper"
-       * than the last.
-       *
-       * @attribute elevation
-       * @type number
-       * @default 1
-       */
-      elevation: {
-        type: Number,
-        reflectToAttribute: true,
-        value: 1
-      },
-
-      /**
-       * Set this to true to animate the shadow when setting a new
-       * `elevation` value.
-       *
-       * @attribute animated
-       * @type boolean
-       * @default false
-       */
-      animated: {
-        type: Boolean,
-        reflectToAttribute: true,
-        value: false
-      }
-    }
-  });
-</script>
 <script>
 
   /**
@@ -21035,192 +21221,6 @@ context. You should place this element as a child of `<body>` whenever possible.
     });
   </script>
 </dom-module>
-<script>
-
-  /** @polymerBehavior Polymer.PaperButtonBehavior */
-  Polymer.PaperButtonBehaviorImpl = {
-
-    properties: {
-
-      /**
-       * The z-depth of this element, from 0-5. Setting to 0 will remove the
-       * shadow, and each increasing number greater than 0 will be "deeper"
-       * than the last.
-       *
-       * @attribute elevation
-       * @type number
-       * @default 1
-       */
-      elevation: {
-        type: Number,
-        reflectToAttribute: true,
-        readOnly: true
-      }
-
-    },
-
-    observers: [
-      '_calculateElevation(focused, disabled, active, pressed, receivedFocusFromKeyboard)',
-      '_computeKeyboardClass(receivedFocusFromKeyboard)'
-    ],
-
-    hostAttributes: {
-      role: 'button',
-      tabindex: '0',
-      animated: true
-    },
-
-    _calculateElevation: function() {
-      var e = 1;
-      if (this.disabled) {
-        e = 0;
-      } else if (this.active || this.pressed) {
-        e = 4;
-      } else if (this.receivedFocusFromKeyboard) {
-        e = 3;
-      }
-      this._setElevation(e);
-    },
-
-    _computeKeyboardClass: function(receivedFocusFromKeyboard) {
-      this.toggleClass('keyboard-focus', receivedFocusFromKeyboard);
-    },
-
-    /**
-     * In addition to `IronButtonState` behavior, when space key goes down,
-     * create a ripple down effect.
-     *
-     * @param {!KeyboardEvent} event .
-     */
-    _spaceKeyDownHandler: function(event) {
-      Polymer.IronButtonStateImpl._spaceKeyDownHandler.call(this, event);
-      // Ensure that there is at most one ripple when the space key is held down.
-      if (this.hasRipple() && this.getRipple().ripples.length < 1) {
-        this._ripple.uiDownAction();
-      }
-    },
-
-    /**
-     * In addition to `IronButtonState` behavior, when space key goes up,
-     * create a ripple up effect.
-     *
-     * @param {!KeyboardEvent} event .
-     */
-    _spaceKeyUpHandler: function(event) {
-      Polymer.IronButtonStateImpl._spaceKeyUpHandler.call(this, event);
-      if (this.hasRipple()) {
-        this._ripple.uiUpAction();
-      }
-    }
-
-  };
-
-  /** @polymerBehavior */
-  Polymer.PaperButtonBehavior = [
-    Polymer.IronButtonState,
-    Polymer.IronControlState,
-    Polymer.PaperRippleBehavior,
-    Polymer.PaperButtonBehaviorImpl
-  ];
-
-</script>
-
-
-<dom-module id="paper-button" assetpath="../bower_components/paper-button/">
-  <template strip-whitespace="">
-    <style include="paper-material">
-      :host {
-        @apply(--layout-inline);
-        @apply(--layout-center-center);
-        position: relative;
-        box-sizing: border-box;
-        min-width: 5.14em;
-        margin: 0 0.29em;
-        background: transparent;
-        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-        -webkit-tap-highlight-color: transparent;
-        font: inherit;
-        text-transform: uppercase;
-        outline-width: 0;
-        border-radius: 3px;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-        cursor: pointer;
-        z-index: 0;
-        padding: 0.7em 0.57em;
-
-        @apply(--paper-font-common-base);
-        @apply(--paper-button);
-      }
-
-      :host([raised].keyboard-focus) {
-        font-weight: bold;
-        @apply(--paper-button-raised-keyboard-focus);
-      }
-
-      :host(:not([raised]).keyboard-focus) {
-        font-weight: bold;
-        @apply(--paper-button-flat-keyboard-focus);
-      }
-
-      :host([disabled]) {
-        background: #eaeaea;
-        color: #a8a8a8;
-        cursor: auto;
-        pointer-events: none;
-
-        @apply(--paper-button-disabled);
-      }
-
-      paper-ripple {
-        color: var(--paper-button-ink-color);
-      }
-    </style>
-
-    <content></content>
-  </template>
-
-  <script>
-    Polymer({
-      is: 'paper-button',
-
-      behaviors: [
-        Polymer.PaperButtonBehavior
-      ],
-
-      properties: {
-        /**
-         * If true, the button should be styled with a shadow.
-         */
-        raised: {
-          type: Boolean,
-          reflectToAttribute: true,
-          value: false,
-          observer: '_calculateElevation'
-        }
-      },
-
-      _calculateElevation: function() {
-        if (!this.raised) {
-          this._setElevation(0);
-        } else {
-          Polymer.PaperButtonBehaviorImpl._calculateElevation.apply(this);
-        }
-      }
-
-      /**
-      Fired when the animation finishes.
-      This is useful if you want to wait until
-      the ripple animation finishes to perform some action.
-
-      @event transitionend
-      Event param: {{node: Object}} detail Contains the animated node.
-      */
-    });
-  </script>
-</dom-module>
 
 
 <dom-module id="neon-animated-pages" assetpath="../bower_components/neon-animation/">
@@ -26132,9 +26132,24 @@ module.exports = Array.isArray || function (arr) {
       }
     </style>
 
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com" name="scoreboard" database-url="https://scoreboard-a046c.firebaseio.com" api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
+    </firebase-app>
+    <firebase-auth id="auth" app-name="scoreboard">
+    </firebase-auth>
+    <firebase-document id="fireQuery" path="/team/fixtures/0/score" app-name="scoreboard" data="{{score}}">
+    </firebase-document>
+
+    <div class="layout horizontal flex wrap">
+      <paper-input class="flex-3" type="number" value="{{score.runs}}" label="runs" maxlength="5"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.wickets}}" min="0" max="10" label="wickets" maxlength="2"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.target}}" min="0" max="2000" label="Target" maxlength="10"></paper-input>
+    </div>
+
     <div class="layout horizontal flex wrap">
       <paper-button class="flex-2" raised="">Dot</paper-button>
-      <paper-button class="flex-2" raised="">1</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementScore">1</paper-button>
       <paper-button class="flex-2" raised="">2</paper-button>
       <paper-button class="flex-2" raised="">3</paper-button>
       <paper-button class="flex-2" raised="">4</paper-button>
@@ -26191,6 +26206,21 @@ module.exports = Array.isArray || function (arr) {
             value: function () { return {}; }
         }
       },
+      incrementScore: function() {
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', parseInt(this.score.runs) +1);
+        this.incrementBalls();
+      },
+      incrementBalls: function() {
+        var balls = parseInt(this.score.balls)+1;
+        if(balls == 6) {
+          balls = 0;
+          this.incrementOvers();
+        }
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/balls', balls);
+      },
+      incrementOvers: function() {
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/overs', parseInt(this.score.overs) +1);
+      }
     });
   </script>
 </dom-module>
@@ -26306,7 +26336,7 @@ module.exports = Array.isArray || function (arr) {
     </firebase-auth>
     <firebase-document path="/team" data="{{data}}">
     </firebase-document>
-    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
+    <iron-media-query query="(min-width: 550px)" query-matches="{{wide}}"></iron-media-query>
 
     <template is="dom-repeat" items="{{data.fixtures}}">
       <template is="dom-if" if="{{wide}}">
@@ -26323,11 +26353,17 @@ module.exports = Array.isArray || function (arr) {
         </div>
       </template>
       <template is="dom-if" if="{{!wide}}">
+        <paper-card>
+          <div class="card-content layout horizontal center-justified">
+            <h3> Target - {{item.score.target}}</h3>
+          </div>
+        </paper-card>
         <div class="layout vertical" style="height: 100vh">
-          <h3 class="flex-3">Runs {{item.score.runs}}</h3>
-          <h3 class="flex-3">Overs {{item.score.overs}}</h3>
+          <h3 class="flex-2">Runs {{item.score.runs}}</h3>
+          <h3 class="flex-2">Overs {{item.score.overs}}</h3>
           
-          <h3 class="flex-3">Wickets {{item.score.wickets}}</h3>
+          <h3 class="flex-2">Wickets {{item.score.wickets}}</h3>
+          <div class="flex-6" style="display: none"></div>
         </div>
       </template>
     </template>
@@ -26365,36 +26401,52 @@ module.exports = Array.isArray || function (arr) {
       paper-input {
         margin-right: 5px;
       }
+
+      input[is="iron-input"] {
+        font: inherit;
+        outline: none;
+        box-shadow: none;
+        border: none;
+        width: auto;
+        text-align: center;
+      }
     </style>
 
     <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com" name="scoreboard" database-url="https://scoreboard-a046c.firebaseio.com" api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
-    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
+    <iron-media-query query="(min-width: 550px)" query-matches="{{wide}}"></iron-media-query>
     <firebase-auth id="auth" app-name="scoreboard">
     </firebase-auth>
-    <firebase-document path="/team" app-name="scoreboard" data="{{data}}">
+    <firebase-document id="fireQuery" path="/team/fixtures/0/score" app-name="scoreboard" data="{{score}}">
     </firebase-document>
+    <template is="dom-if" if="{{wide}}">
+      <div class="layout horizontal flex wrap">
 
-    <template is="dom-repeat" items="{{data.fixtures}}">
-      <template is="dom-if" if="{{wide}}">
-        <div class="layout horizontal flex wrap">
-          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
-          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-          
-          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
-        </div>
-        <div>
-          <paper-input class="flex-3" type="number" value="{{item.score.target}}" min="0" max="11" label="Target" maxlength="10"></paper-input>
-        </div>
-      </template>
-      <template is="dom-if" if="{{!wide}}">
-        <div class="layout vertical flex" style="height:100vh">
-          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
-          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-          
-          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
-        </div>
-      </template>
+        <paper-input class="flex-3" type="number" value="{{score.runs}}" label="runs" maxlength="5"></paper-input>
+        <paper-input class="flex-3" type="number" value="{{score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+        <paper-input class="flex-3" type="number" value="{{score.balls}}" min="0" max="6" label="balls" maxlength="2" on-tap="bumpOver"></paper-input>
+        <paper-button raised="" on-tap="incrementScore">
+          {{data.runs}}
+        </paper-button>
+        <paper-input class="flex-3" type="number" value="{{score.wickets}}" min="0" max="10" label="wickets" maxlength="2"></paper-input>
+      </div>
+      <div>
+        <paper-input class="flex-3" type="number" value="{{score.target}}" min="0" max="2000" label="Target" maxlength="10"></paper-input>
+      </div>
+    </template>
+    <template is="dom-if" if="{{!wide}}">
+      <div class="layout vertical flex" style="height:100vh">
+        <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
+        <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
+        
+        <paper-button>
+          1
+        </paper-button>
+        <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
+      </div>
+      <div>
+        <paper-input class="flex-3" type="number" value="{{item.score.target}}" min="0" max="11" label="Target" maxlength="10"></paper-input>
+      </div>
     </template>
   </template>
 
@@ -26406,20 +26458,46 @@ module.exports = Array.isArray || function (arr) {
       properties: {
         score: {
           type: Object,
-          value: {
-            runs: 300,
-            overs: 50,
-            balls: 4,
-            wickets: 6
-          },
-          notify: false
+          notify: true
+        },
+        runs: {
+          type: Object,
+          value: 0,
+          notify: true
         }
       },
-      attached: function() {
-         this.$.auth.signInAnonymously().then(function() {
-         console.log('logged in successfully');
-         console.log('team is ', this.data);
-         });
+      attached: function () {
+        this.$.auth.signInAnonymously().then(function () {
+          console.log('logged in successfully');
+        });
+      },
+      dataChanged: function(newData,oldData) {
+        this.$.fireQuery.save();
+      },
+      addScore: function () {
+        this.score.runs += 1;
+        console.log('add tapped', this.score.runs);
+      },
+      incrementScore: function() {
+        this.runs = parseInt(this.score.runs);
+        this.runs += 1;
+        console.log('button pressed before assign', this.score.runs);
+        this.score.runs = this.runs;
+        console.log('button 1 pressed', this.score.runs);
+        this.$.fireQuery.save();
+      },
+      subtractScore: function () {
+        //this.score.runs = this.score.runs - 1;
+        console.log('subtract trapped', this.item.score.runs);
+      },
+      bumpOver: function () {
+        if(this.score.balls == 5) {
+          console.log('next over');
+          this.score.overs = parseInt(this.score.overs) + 1;
+
+          console.log('overs', this.score.overs);
+          this.score.balls = 0;
+        }
       }
     });
   </script>
