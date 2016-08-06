@@ -26148,32 +26148,32 @@ module.exports = Array.isArray || function (arr) {
     </div>
 
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised="">Dot</paper-button>
-      <paper-button class="flex-2" raised="" on-tap="incrementScore">1</paper-button>
-      <paper-button class="flex-2" raised="">2</paper-button>
-      <paper-button class="flex-2" raised="">3</paper-button>
-      <paper-button class="flex-2" raised="">4</paper-button>
-      <paper-button class="flex-2" raised="">6</paper-button>
-      <paper-button class="flex-2" raised="">OTHER</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementBalls">Dot</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementScore" runs="1">1</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementScore" runs="2">2</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementScore" runs="3">3</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementScore" runs="4">4</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementScore" runs="6">6</paper-button>
+      
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised="">Dropped Catch</paper-button>
-      <paper-button class="flex-2" raised="">1 Bye</paper-button>
-      <paper-button class="flex-2" raised="">2 Byes</paper-button>
-      <paper-button class="flex-2" raised="">3 Byes</paper-button>
-      <paper-button class="flex-2" raised="">4 Byes</paper-button>
-      <paper-button class="flex-2" raised="">OTHER</paper-button>
+      <paper-button class="flex-2" on-tap="incrementBalls" raised="">Dropped Catch</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="1" raised="">1 Bye</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="2" raised="">2 Byes</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="3" raised="">3 Byes</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="4" raised="">4 Byes</paper-button>
+      
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised="">Add note</paper-button>
-      <paper-button class="flex-2" raised="">1 LB</paper-button>
-      <paper-button class="flex-2" raised="">2 LBs</paper-button>
-      <paper-button class="flex-2" raised="">3 LBs</paper-button>
-      <paper-button class="flex-2" raised="">4 LBs</paper-button>
-      <paper-button class="flex-2" raised="">OTHER</paper-button>
+      
+      <paper-button class="flex-2" on-tap="incrementScore" runs="1" raised="">1 LB</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="2" raised="">2 LBs</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="3" raised="">3 LBs</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="4" raised="">4 LBs</paper-button>
+      
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised="">Wide Only</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" raised="" runs="1" extras="true">Wide Only</paper-button>
       <paper-button class="flex-2" raised="">Wide + Runs</paper-button>
       <paper-button class="flex-2" raised="">Wide + Run out</paper-button>
       <paper-button class="flex-2" raised="">Wide + Wicket </paper-button>
@@ -26185,14 +26185,15 @@ module.exports = Array.isArray || function (arr) {
       <paper-button class="flex-2" raised="">No ball + Wicket </paper-button>
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised="">Bowled</paper-button>
-      <paper-button class="flex-2" raised="">Caught</paper-button>
-      <paper-button class="flex-2" raised="">Stumped</paper-button>
-      <paper-button class="flex-2" raised="">Run out</paper-button>
-      <paper-button class="flex-2" raised="">LBW</paper-button>
-      <paper-button class="flex-2" raised="">Hit Wkt</paper-button>
-      <paper-button class="flex-2" raised="">Other</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementWickets">Bowled</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementWickets">Caught</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementWickets">Stumped</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementWickets">Run out</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementWickets">LBW</paper-button>
+      <paper-button class="flex-2" raised="" on-tap="incrementWickets">Hit Wkt</paper-button>
+      
     </div>
+    <paper-toast id="toast" text="Innings completed!!"></paper-toast>
   </template>
 
   <script>
@@ -26206,9 +26207,21 @@ module.exports = Array.isArray || function (arr) {
             value: function () { return {}; }
         }
       },
-      incrementScore: function() {
-        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', parseInt(this.score.runs) +1);
-        this.incrementBalls();
+      incrementScore: function(e) {
+        console.log('target',e.target.hasAttribute('extras'));
+        var increment = parseInt(e.target.getAttribute('runs'));
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', parseInt(this.score.runs) + increment);
+
+        if(!e.target.hasAttribute('extras')) {
+          this.incrementBalls();
+        }
+
+        console.log('target is', parseInt(this.score.target));
+
+        if(parseInt(this.score.target) >= 0 && (parseInt(this.score.runs) > parseInt(this.score.target))) {
+          this.$.toast.text = "Target successfully chased";
+          this.$.toast.open();
+        }
       },
       incrementBalls: function() {
         var balls = parseInt(this.score.balls)+1;
@@ -26220,6 +26233,19 @@ module.exports = Array.isArray || function (arr) {
       },
       incrementOvers: function() {
         this.$.fireQuery.setStoredValue('/team/fixtures/0/score/overs', parseInt(this.score.overs) +1);
+      },
+      incrementWickets: function() {
+        var wickets = parseInt(this.score.wickets) +1;
+        if(this.score.target == 0 && wickets == 10) {
+          this.score.target = this.score.runs;
+          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/target', this.score.target);
+          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', 0);
+          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/overs', 0);
+          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/balls ', 0);
+          wickets = 0;
+          this.$.toast.open();
+        }
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/wickets', wickets);
       }
     });
   </script>
@@ -26348,7 +26374,7 @@ module.exports = Array.isArray || function (arr) {
         <div class="layout horizontal around-justified wrap">
           <h3>Runs {{item.score.runs}}</h3>
           <h3>Overs {{item.score.overs}}</h3>
-          
+          <h3>Balls {{item.score.balls}}</h3>
           <h3>Wickets {{item.score.wickets}}</h3>
         </div>
       </template>
@@ -26361,7 +26387,7 @@ module.exports = Array.isArray || function (arr) {
         <div class="layout vertical" style="height: 100vh">
           <h3 class="flex-2">Runs {{item.score.runs}}</h3>
           <h3 class="flex-2">Overs {{item.score.overs}}</h3>
-          
+          <h3 class="flex-2">Balls {{item.score.balls}}</h3>
           <h3 class="flex-2">Wickets {{item.score.wickets}}</h3>
           <div class="flex-6" style="display: none"></div>
         </div>
