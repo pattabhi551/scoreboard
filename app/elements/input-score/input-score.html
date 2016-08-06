@@ -24,9 +24,34 @@ Example:
       }
     </style>
 
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+                  name="scoreboard"
+                  database-url="https://scoreboard-a046c.firebaseio.com"
+                  api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
+    </firebase-app>
+    <firebase-auth id="auth" app-name="scoreboard">
+    </firebase-auth>
+    <firebase-document id="fireQuery"
+                       path="/team/fixtures/0/score"
+                       app-name="scoreboard"
+                       data="{{score}}">
+    </firebase-document>
+
+    <div class="layout horizontal flex wrap">
+      <paper-input class="flex-3" type="number" value="{{score.runs}}" label="runs" maxlength="5"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.overs}}" min="0" max="60" label="overs"
+                   maxlength="3"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.balls}}" min="0" max="6" label="balls"
+                   maxlength="2"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.wickets}}" min="0" max="10" label="wickets"
+                   maxlength="2"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.target}}" min="0" max="2000" label="Target"
+                   maxlength="10"></paper-input>
+    </div>
+
     <div class="layout horizontal flex wrap">
       <paper-button class="flex-2" raised>Dot</paper-button>
-      <paper-button class="flex-2" raised>1</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementScore">1</paper-button>
       <paper-button class="flex-2" raised>2</paper-button>
       <paper-button class="flex-2" raised>3</paper-button>
       <paper-button class="flex-2" raised>4</paper-button>
@@ -83,6 +108,21 @@ Example:
             value: function () { return {}; }
         }
       },
+      incrementScore: function() {
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', parseInt(this.score.runs) +1);
+        this.incrementBalls();
+      },
+      incrementBalls: function() {
+        var balls = parseInt(this.score.balls)+1;
+        if(balls == 6) {
+          balls = 0;
+          this.incrementOvers();
+        }
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/balls', balls);
+      },
+      incrementOvers: function() {
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/overs', parseInt(this.score.overs) +1);
+      }
     });
   </script>
 </dom-module>

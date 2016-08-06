@@ -1,4 +1,3 @@
-
 <!--
 An element providing a solution to no problem in particular.
 Example:
@@ -15,6 +14,15 @@ Example:
       paper-input {
         margin-right: 5px;
       }
+
+      input[is="iron-input"] {
+        font: inherit;
+        outline: none;
+        box-shadow: none;
+        border: none;
+        width: auto;
+        text-align: center;
+      }
     </style>
 
     <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
@@ -22,35 +30,49 @@ Example:
                   database-url="https://scoreboard-a046c.firebaseio.com"
                   api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
     </firebase-app>
-    <iron-media-query query="(min-width: 600px)" query-matches="{{wide}}"></iron-media-query>
+    <iron-media-query query="(min-width: 550px)" query-matches="{{wide}}"></iron-media-query>
     <firebase-auth id="auth" app-name="scoreboard">
     </firebase-auth>
-    <firebase-document
-      path="/team"
+    <firebase-document id="fireQuery"
+      path="/team/fixtures/0/score"
       app-name="scoreboard"
-      data="{{data}}">
+      data="{{score}}">
     </firebase-document>
+    <template is="dom-if" if="{{wide}}">
+      <div class="layout horizontal flex wrap">
 
-    <template is="dom-repeat" items="{{data.fixtures}}">
-      <template is="dom-if" if="{{wide}}">
-        <div class="layout horizontal flex wrap">
-          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
-          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-          <!--<paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>-->
-          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
-        </div>
-        <div>
-          <paper-input class="flex-3" type="number" value="{{item.score.target}}" min="0" max="11" label="Target" maxlength="10"></paper-input>
-        </div>
-      </template>
-      <template is="dom-if" if ="{{!wide}}">
-        <div class="layout vertical flex" style="height:100vh">
-          <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
-          <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs" maxlength="3"></paper-input>
-          <!--<paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>-->
-          <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets" maxlength="2"></paper-input>
-        </div>
-      </template>
+        <paper-input class="flex-3" type="number" value="{{score.runs}}" label="runs" maxlength="5"></paper-input>
+        <paper-input class="flex-3" type="number" value="{{score.overs}}" min="0" max="60" label="overs"
+                     maxlength="3"></paper-input>
+        <paper-input class="flex-3" type="number" value="{{score.balls}}" min="0" max="6" label="balls"
+                     maxlength="2" on-tap="bumpOver"></paper-input>
+        <paper-button raised on-tap="incrementScore">
+          {{data.runs}}
+        </paper-button>
+        <paper-input class="flex-3" type="number" value="{{score.wickets}}" min="0" max="10" label="wickets"
+                     maxlength="2"></paper-input>
+      </div>
+      <div>
+        <paper-input class="flex-3" type="number" value="{{score.target}}" min="0" max="2000" label="Target"
+                     maxlength="10"></paper-input>
+      </div>
+    </template>
+    <template is="dom-if" if="{{!wide}}">
+      <div class="layout vertical flex" style="height:100vh">
+        <paper-input class="flex-3" type="number" value="{{item.score.runs}}" label="runs" maxlength="5"></paper-input>
+        <paper-input class="flex-3" type="number" value="{{item.score.overs}}" min="0" max="60" label="overs"
+                     maxlength="3"></paper-input>
+        <!--<paper-input class="flex-3" type="number" value="{{item.score.balls}}" min="0" max="6" label="balls" maxlength="2"></paper-input>-->
+        <paper-button>
+          1
+        </paper-button>
+        <paper-input class="flex-3" type="number" value="{{item.score.wickets}}" min="0" max="11" label="wickets"
+                     maxlength="2"></paper-input>
+      </div>
+      <div>
+        <paper-input class="flex-3" type="number" value="{{item.score.target}}" min="0" max="11" label="Target"
+                     maxlength="10"></paper-input>
+      </div>
     </template>
   </template>
 
@@ -62,20 +84,46 @@ Example:
       properties: {
         score: {
           type: Object,
-          value: {
-            runs: 300,
-            overs: 50,
-            balls: 4,
-            wickets: 6
-          },
-          notify: false
+          notify: true
+        },
+        runs: {
+          type: Object,
+          value: 0,
+          notify: true
         }
       },
-      attached: function() {
-         this.$.auth.signInAnonymously().then(function() {
-         console.log('logged in successfully');
-         console.log('team is ', this.data);
-         });
+      attached: function () {
+        this.$.auth.signInAnonymously().then(function () {
+          console.log('logged in successfully');
+        });
+      },
+      dataChanged: function(newData,oldData) {
+        this.$.fireQuery.save();
+      },
+      addScore: function () {
+        this.score.runs += 1;
+        console.log('add tapped', this.score.runs);
+      },
+      incrementScore: function() {
+        this.runs = parseInt(this.score.runs);
+        this.runs += 1;
+        console.log('button pressed before assign', this.score.runs);
+        this.score.runs = this.runs;
+        console.log('button 1 pressed', this.score.runs);
+        this.$.fireQuery.save();
+      },
+      subtractScore: function () {
+        //this.score.runs = this.score.runs - 1;
+        console.log('subtract trapped', this.item.score.runs);
+      },
+      bumpOver: function () {
+        if(this.score.balls == 5) {
+          console.log('next over');
+          this.score.overs = parseInt(this.score.overs) + 1;
+
+          console.log('overs', this.score.overs);
+          this.score.balls = 0;
+        }
       }
     });
   </script>
