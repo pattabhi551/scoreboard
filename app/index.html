@@ -58,13 +58,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles iron-flex iron-flex-alignment">
     paper-tabs {
-      background-color: var(--paper-blue-900);
+      background-color: rgb(63, 81, 181);
       color: white;
     }
 
     paper-tabs[no-bar] paper-tab.iron-selected {
       color: #ffff8d;
     }
+
+    paper-material {
+      margin: 0 auto;
+    }
+
   </style>
 </head>
 
@@ -72,99 +77,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    <paper-drawer-panel id="paperDrawerPanel">
-      <!-- Drawer Scroll Header Panel -->
-      <paper-scroll-header-panel drawer fixed>
+    <!-- Main Toolbar -->
+    <paper-toolbar main id="mainToolbar">
+      <!--<paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>-->
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="menu-name">Menu</span>
-        </paper-toolbar>
+      <!-- Application name -->
+      <div class="middle middle-container">
+        <div class="app-name" style="align-content: center"><b>Cricket Scoreboard - See your team's score live!!</b></div>
+      </div>
+    </paper-toolbar>
 
-        <!-- Drawer Content -->
-        <paper-menu attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
-            <iron-icon icon="home"></iron-icon>
-            <span>Home</span>
-          </a>
+    <!-- Main Content -->
+    <div class="content">
+      <iron-pages attr-for-selected="data-route" selected="{{route}}">
+        <section data-route="home">
+          <paper-material elevation="1" style="max-width: 400px; max-height: 500px;">
+            <score-view-element></score-view-element>
+          </paper-material>
+        </section>
 
-          <a data-route="users" href="{{baseUrl}}users">
-            <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
-          </a>
+        <section data-route="score">
+          <paper-material elevation="1">
+            <!--<score-element></score-element>-->
+            <input-score></input-score>
+          </paper-material>
+        </section>
 
-          <a data-route="contact" href="{{baseUrl}}contact">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
-          </a>
-        </paper-menu>
-      </paper-scroll-header-panel>
-
-      <!-- Main Area -->
-      <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar" class="tall">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-
-          <!-- Application name -->
-          <div class="middle middle-container">
-            <div class="app-name">Cricket Scoreboard - See your team's score live!!</div>
-          </div>
+        <section data-route="fixture">
+          <paper-material elevation="1" style="max-width: 700px;">
+            <!--<score-element></score-element>-->
+            <input-fixture></input-fixture>
+          </paper-material>
+        </section>
 
 
-          <!-- Application sub title -->
-          <div class="bottom bottom-container">
-            <div class="bottom-title">We all need a live scoreboard, don't we ?? </div>
-          </div>
-        </paper-toolbar>
+        <section data-route="user-info">
+          <paper-material elevation="1">
+            <h2 class="page-title">User: {{params.name}}</h2>
+            <div>This is {{params.name}}'s section</div>
+          </paper-material>
+        </section>
 
-        <!-- Toolbar icons -->
-        <paper-tabs selected="0" scrollable>
-          <paper-tab>Royal Challengers Bangalore</paper-tab>
-          <paper-tab>Delhi Daredevils</paper-tab>
-        </paper-tabs>
-
-        <!-- Main Content -->
-        <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
-            <section data-route="home">
-              <h2>Batting</h2>
-              <batsman-list></batsman-list>
-
-              <h2>Bowling</h2>
-              <bowler-list></bowler-list>
-            </section>
-
-            <section data-route="users">
-              <paper-material elevation="1">
-                <input-score></input-score>
-              </paper-material>
-            </section>
-
-            <section data-route="user-info">
-              <paper-material elevation="1">
-                <h2 class="page-title">User: {{params.name}}</h2>
-                <div>This is {{params.name}}'s section</div>
-              </paper-material>
-            </section>
-
-            <section data-route="contact">
-              <paper-material elevation="1">
-                <h2 class="page-title">Contact</h2>
-                <p>This is the contact section</p>
-              </paper-material>
-            </section>
-          </iron-pages>
-        </div>
-      </paper-scroll-header-panel>
-    </paper-drawer-panel>
-
+        <section data-route="team">
+          <paper-material elevation="1" style="max-width: 700px;">
+            <team-element></team-element>
+          </paper-material>
+        </section>
+      </iron-pages>
+    </div>
     <paper-toast id="toast">
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
     </paper-toast>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
     <paper-toast id="caching-complete"
                  duration="6000"
                  text="Caching complete! This app will work offline.">
@@ -179,7 +144,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          cache-config-file="cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-    -->
 
   </template>
 

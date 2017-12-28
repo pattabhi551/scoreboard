@@ -23,19 +23,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // Middleware
     function scrollToTop(ctx, next) {
-      app.scrollPageToTop();
+     // app.scrollPageToTop();
       next();
     }
 
-    function closeDrawer(ctx, next) {
+   /* function closeDrawer(ctx, next) {
       app.closeDrawer();
       next();
-    }
+    }*/
 
     // Routes
-    page('*', scrollToTop, closeDrawer, function(ctx, next) {
+   /* page('*', scrollToTop, closeDrawer, function(ctx, next) {
       next();
-    });
+    });*/
 
     page('/', function() {
       app.route = 'home';
@@ -45,8 +45,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'home';
     });
 
-    page('/users', function() {
-      app.route = 'users';
+    page('/score', function() {
+      app.route = 'score';
     });
 
     page('/users/:name', function(data) {
@@ -54,8 +54,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.params = data.params;
     });
 
-    page('/contact', function() {
-      app.route = 'contact';
+    page('/team', function() {
+      app.route = 'team';
+    });
+
+    page('/fixture', function() {
+      app.route = 'fixture';
     });
 
     // 404

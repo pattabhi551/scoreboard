@@ -4,6 +4,8 @@
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../paper-button/paper-button.html">
 
+<link rel="import" href="../../styles/the-times.html">
+
 <!--
 An element providing a solution to no problem in particular.
 Example:
@@ -16,7 +18,7 @@ Example:
 -->
 <dom-module id="input-score">
   <template>
-    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
+    <style include="iron-flex iron-flex-alignment iron-flex-factors">
       paper-button {
         background-color: var(--paper-blue-900);
         color: white;
@@ -24,33 +26,58 @@ Example:
       }
     </style>
 
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+                  name="scoreboard"
+                  database-url="https://scoreboard-a046c.firebaseio.com"
+                  api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
+    </firebase-app>
+    <firebase-auth id="auth" app-name="scoreboard">
+    </firebase-auth>
+    <firebase-document id="fireQuery"
+                       path="/team/fixtures/0/score"
+                       app-name="scoreboard"
+                       data="{{score}}">
+    </firebase-document>
+
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised>Dot</paper-button>
-      <paper-button class="flex-2" raised>1</paper-button>
-      <paper-button class="flex-2" raised>2</paper-button>
-      <paper-button class="flex-2" raised>3</paper-button>
-      <paper-button class="flex-2" raised>4</paper-button>
-      <paper-button class="flex-2" raised>6</paper-button>
-      <paper-button class="flex-2" raised>OTHER</paper-button>
+      <paper-input class="flex-3" type="number" value="{{score.runs}}" label="runs" maxlength="5"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.overs}}" min="0" max="60" label="overs"
+                   maxlength="3"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.balls}}" min="0" max="6" label="balls"
+                   maxlength="2"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.wickets}}" min="0" max="10" label="wickets"
+                   maxlength="2"></paper-input>
+      <paper-input class="flex-3" type="number" value="{{score.target}}" min="0" max="2000" label="Target"
+                   maxlength="10"></paper-input>
+    </div>
+
+    <div class="layout horizontal flex wrap">
+      <paper-button class="secondary flex-2" raised on-tap="incrementBalls">Dot</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementScore" runs="1">1</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementScore" runs="2">2</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementScore" runs="3">3</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementScore" runs="4">4</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementScore" runs="6">6</paper-button>
+      <!--<paper-button class="flex-2" raised disabled>OTHER</paper-button>-->
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised>Dropped Catch</paper-button>
-      <paper-button class="flex-2" raised>1 Bye</paper-button>
-      <paper-button class="flex-2" raised>2 Byes</paper-button>
-      <paper-button class="flex-2" raised>3 Byes</paper-button>
-      <paper-button class="flex-2" raised>4 Byes</paper-button>
-      <paper-button class="flex-2" raised>OTHER</paper-button>
+      <paper-button class="flex-2" on-tap="incrementBalls" raised>Dropped Catch</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="1" raised>1 Bye</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="2" raised>2 Byes</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="3" raised>3 Byes</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="4" raised>4 Byes</paper-button>
+      <!--<paper-button class="flex-2" raised>OTHER</paper-button>-->
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised>Add note</paper-button>
-      <paper-button class="flex-2" raised>1 LB</paper-button>
-      <paper-button class="flex-2" raised>2 LBs</paper-button>
-      <paper-button class="flex-2" raised>3 LBs</paper-button>
-      <paper-button class="flex-2" raised>4 LBs</paper-button>
-      <paper-button class="flex-2" raised>OTHER</paper-button>
+      <!--<paper-button class="flex-2" raised>Add note</paper-button>-->
+      <paper-button class="flex-2" on-tap="incrementScore" runs="1" raised>1 LB</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="2" raised>2 LBs</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="3" raised>3 LBs</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" runs="4" raised>4 LBs</paper-button>
+      <!--<paper-button class="flex-2" raised>OTHER</paper-button>-->
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised>Wide Only</paper-button>
+      <paper-button class="flex-2" on-tap="incrementScore" raised runs="1" extras="true">Wide Only</paper-button>
       <paper-button class="flex-2" raised>Wide + Runs</paper-button>
       <paper-button class="flex-2" raised>Wide + Run out</paper-button>
       <paper-button class="flex-2" raised>Wide + Wicket </paper-button>
@@ -62,14 +89,15 @@ Example:
       <paper-button class="flex-2" raised>No ball + Wicket </paper-button>
     </div>
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised>Bowled</paper-button>
-      <paper-button class="flex-2" raised>Caught</paper-button>
-      <paper-button class="flex-2" raised>Stumped</paper-button>
-      <paper-button class="flex-2" raised>Run out</paper-button>
-      <paper-button class="flex-2" raised>LBW</paper-button>
-      <paper-button class="flex-2" raised>Hit Wkt</paper-button>
-      <paper-button class="flex-2" raised>Other</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementWickets">Bowled</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementWickets">Caught</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementWickets">Stumped</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementWickets">Run out</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementWickets">LBW</paper-button>
+      <paper-button class="flex-2" raised on-tap="incrementWickets">Hit Wkt</paper-button>
+      <!--<paper-button class="flex-2 btn-inverse" disabled>Other</paper-button>-->
     </div>
+    <paper-toast id="toast" text="Innings completed!!"></paper-toast>
   </template>
 
   <script>
@@ -83,6 +111,48 @@ Example:
             value: function () { return {}; }
         }
       },
+      incrementScore: function(e) {
+        var increment = parseInt(e.target.getAttribute('runs'));
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', parseInt(this.score.runs) + increment);
+
+        if(!e.target.hasAttribute('extras')) {
+          this.incrementBalls();
+        }
+
+        if(parseInt(this.score.target) > 0 && (parseInt(this.score.runs) > parseInt(this.score.target))) {
+          this.$.toast.text = "Target successfully chased";
+          this.$.toast.open();
+        }
+      },
+      incrementBalls: function() {
+        var balls = parseInt(this.score.balls)+1;
+        if(balls == 6) {
+          balls = 0;
+          this.incrementOvers();
+        }
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/balls', balls);
+      },
+      incrementOvers: function() {
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/overs', parseInt(this.score.overs) +1);
+      },
+      incrementWickets: function() {
+        var wickets = parseInt(this.score.wickets) +1;
+        this.incrementBalls();
+        this.$.fireQuery.setStoredValue('/team/fixtures/0/score/wickets', wickets);
+        if(this.score.target == 0 && wickets == 10) {
+          this.score.target = this.score.runs;
+          var score = {
+            target: this.score.target,
+            runs: 0,
+            overs: 0,
+            balls: 0,
+            wickets: 0
+          };
+
+          this.$.fireQuery.setStoredValue('/team/fixtures/0/score', score);
+          this.$.toast.open();
+        }
+      }
     });
   </script>
 </dom-module>

@@ -1,0 +1,88 @@
+
+<!--
+An element providing a solution to no problem in particular.
+Example:
+    <tpa-component></tpa-component>
+Example:
+    <tpa-component>
+      <h2>Hello tpa-component</h2>
+    </tpa-component>
+@demo demo/index.html
+-->
+<dom-module id="score-view-element">
+  <template>
+    <style include="iron-flex iron-flex-alignment iron-flex-factors">
+      :host {
+        max-height: 400px;
+      }
+    </style>
+
+    <firebase-app auth-domain="scoreboard-a046c.firebaseapp.com"
+                  database-url="https://scoreboard-a046c.firebaseio.com"
+                  api-key="AIzaSyDiwFRGWF7RIi6irEy6HKdIpPoOWTz6Izo">
+    </firebase-app>
+    <firebase-auth id="auth">
+    </firebase-auth>
+    <firebase-document
+      path="/team"
+      data="{{data}}">
+    </firebase-document>
+    <iron-media-query query="(min-width: 550px)" query-matches="{{wide}}"></iron-media-query>
+
+    <template is="dom-repeat" items="{{data.fixtures}}">
+      <template is="dom-if" if="{{wide}}">
+        <paper-card>
+          <div class="card-content layout horizontal center-justified">
+            <h3> Target - {{item.score.target}}</h3>
+          </div>
+        </paper-card>
+        <div class="layout horizontal around-justified wrap">
+          <h3>Runs {{item.score.runs}}</h3>
+          <h3>Overs {{item.score.overs}}</h3>
+          <h3>Balls {{item.score.balls}}</h3>
+          <h3>Wickets {{item.score.wickets}}</h3>
+        </div>
+      </template>
+      <template is="dom-if" if="{{!wide}}">
+        <paper-card>
+          <div class="card-content layout horizontal center-justified">
+            <h3> Target - {{item.score.target}}</h3>
+          </div>
+        </paper-card>
+        <div class="layout vertical">
+          <h3 class="flex-2">Runs {{item.score.runs}}</h3>
+          <h3 class="flex-2">Overs {{item.score.overs}}</h3>
+          <h3 class="flex-2">Balls {{item.score.balls}}</h3>
+          <h3 class="flex-2">Wickets {{item.score.wickets}}</h3>
+          <div class="flex-6" style="display: none"></div>
+        </div>
+      </template>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'score-view-element',
+
+      properties: {
+        score: {
+          type: Object,
+          value: {
+            runs: 300,
+            overs: 50,
+            balls: 4,
+            wickets: 6
+          },
+          notify: false
+        }
+      },
+      attached: function() {
+         this.$.auth.signInAnonymously().then(function() {
+         console.log('logged in successfully');
+         console.log('team is ', this.data);
+         });
+      }
+    });
+  </script>
+</dom-module>

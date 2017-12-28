@@ -47,8 +47,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // is shrunk to nothing on condensing.
   window.addEventListener('paper-header-transform', function(e) {
     var appName = Polymer.dom(document).querySelector('#mainToolbar .app-name');
-    var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
-    var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
+   // var middleContainer = Polymer.dom(document).querySelector('#mainToolbar .middle-container');
+   // var bottomContainer = Polymer.dom(document).querySelector('#mainToolbar .bottom-container');
     var detail = e.detail;
     var heightDiff = detail.height - detail.condensedHeight;
     var yRatio = Math.min(1, detail.y / heightDiff);
@@ -60,22 +60,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var scaleBottom = 1 - yRatio;
 
     // Move/translate middleContainer
-    Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
+   // Polymer.Base.transform('translate3d(0,' + yRatio * 100 + '%,0)', middleContainer);
 
     // Scale bottomContainer and bottom sub title to nothing and back
-    Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
+   // Polymer.Base.transform('scale(' + scaleBottom + ') translateZ(0)', bottomContainer);
 
     // Scale middleContainer appName
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   });
 
   // Scroll page to top and expand header
-  app.scrollPageToTop = function() {
+ /* app.scrollPageToTop = function() {
     app.$.headerPanelMain.scrollToTop(true);
   };
-
-  app.closeDrawer = function() {
+*/
+ /* app.closeDrawer = function() {
     app.$.paperDrawerPanel.closeDrawer();
-  };
+  };*/
 
 })(document);
