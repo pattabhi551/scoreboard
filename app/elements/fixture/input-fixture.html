@@ -1,0 +1,74 @@
+<link rel="import" href="../polymer/polymer.html">
+<dom-module id="input-fixture">
+  <template>
+      <style include="iron-flex iron-flex-alignment">
+        :host{
+          max-width: 700px;
+          margin: 10px;
+        }
+
+        form {
+          max-width: 70%;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        paper-button {
+          text-transform: none;
+        }
+      </style>
+      <h3>Create a new fixture - Every match is an opportunity for glory !!</h3>
+      <div class="flex horizontal wrap">
+        <form id="fixtureForm">
+          <paper-input label="Name of the home Team"></paper-input>
+          <paper-input label="Name of the away Team"></paper-input>
+          <vaadin-date-picker
+            validator="this-year-validator"
+            label="Date of Fixture">
+          </vaadin-date-picker>
+          <paper-input label="Venue"></paper-input>
+
+          <paper-menu-button>
+            <paper-button class="dropdown-trigger" raised>
+              <iron-icon icon="check"></iron-icon>
+              <span>Toss won by</span>
+            </paper-button>
+            <paper-menu class="dropdown-content">
+                <paper-item>Home</paper-item>
+                <paper-item>Away</paper-item>
+            </paper-menu>
+          </paper-menu-button>
+
+          <paper-menu-button>
+            <paper-button class="dropdown-trigger" selected raised>
+              <iron-icon icon="check"></iron-icon>
+              <span>Elected to </span>
+            </paper-button>
+            <paper-menu class="dropdown-content">
+              <paper-item>Bat</paper-item>
+              <paper-item>Field</paper-item>
+            </paper-menu>
+          </paper-menu-button>
+
+          <paper-button raised>
+            <iron-icon icon="save"></iron-icon>
+            Create Fixture
+          </paper-button>
+        </form>
+      </div>
+  </template>
+  <script>
+    Polymer({
+      is: 'input-fixture',
+      properties: {
+        toss: {
+          type: Object,
+          notify: true
+        }
+      },
+      attached: function() {
+
+      }
+    });
+  </script>
+</dom-module>

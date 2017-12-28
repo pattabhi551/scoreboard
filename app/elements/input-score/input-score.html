@@ -1,8 +1,10 @@
-<!--<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../paper-button/paper-button.html">-->
+<link rel="import" href="../paper-button/paper-button.html">
+
+<link rel="import" href="../../styles/the-times.html">
 
 <!--
 An element providing a solution to no problem in particular.
@@ -16,7 +18,7 @@ Example:
 -->
 <dom-module id="input-score">
   <template>
-    <style is="custom-style" include="iron-flex iron-flex-alignment iron-flex-factors">
+    <style include="iron-flex iron-flex-alignment iron-flex-factors">
       paper-button {
         background-color: var(--paper-blue-900);
         color: white;
@@ -50,7 +52,7 @@ Example:
     </div>
 
     <div class="layout horizontal flex wrap">
-      <paper-button class="flex-2" raised on-tap="incrementBalls">Dot</paper-button>
+      <paper-button class="secondary flex-2" raised on-tap="incrementBalls">Dot</paper-button>
       <paper-button class="flex-2" raised on-tap="incrementScore" runs="1">1</paper-button>
       <paper-button class="flex-2" raised on-tap="incrementScore" runs="2">2</paper-button>
       <paper-button class="flex-2" raised on-tap="incrementScore" runs="3">3</paper-button>
@@ -110,7 +112,6 @@ Example:
         }
       },
       incrementScore: function(e) {
-        console.log('target',e.target.hasAttribute('extras'));
         var increment = parseInt(e.target.getAttribute('runs'));
         this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', parseInt(this.score.runs) + increment);
 
@@ -118,9 +119,7 @@ Example:
           this.incrementBalls();
         }
 
-        console.log('target is', parseInt(this.score.target));
-
-        if(parseInt(this.score.target) >= 0 && (parseInt(this.score.runs) > parseInt(this.score.target))) {
+        if(parseInt(this.score.target) > 0 && (parseInt(this.score.runs) > parseInt(this.score.target))) {
           this.$.toast.text = "Target successfully chased";
           this.$.toast.open();
         }
@@ -138,17 +137,21 @@ Example:
       },
       incrementWickets: function() {
         var wickets = parseInt(this.score.wickets) +1;
-        if(this.score.target == 0 && wickets == 10) {
-          this.score.target = this.score.runs;
-          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/target', this.score.target);
-          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/runs', 0);
-          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/overs', 0);
-          this.$.fireQuery.setStoredValue('/team/fixtures/0/score/balls', 0);
-          wickets = 0;
-          this.$.toast.open();
-        }
         this.incrementBalls();
         this.$.fireQuery.setStoredValue('/team/fixtures/0/score/wickets', wickets);
+        if(this.score.target == 0 && wickets == 10) {
+          this.score.target = this.score.runs;
+          var score = {
+            target: this.score.target,
+            runs: 0,
+            overs: 0,
+            balls: 0,
+            wickets: 0
+          };
+
+          this.$.fireQuery.setStoredValue('/team/fixtures/0/score', score);
+          this.$.toast.open();
+        }
       }
     });
   </script>

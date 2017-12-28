@@ -65,6 +65,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-tabs[no-bar] paper-tab.iron-selected {
       color: #ffff8d;
     }
+
+    paper-material {
+      margin: 0 auto;
+    }
+
   </style>
 </head>
 
@@ -78,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Application name -->
       <div class="middle middle-container">
-        <div class="app-name">Cricket Scoreboard - See your team's score live!!</div>
+        <div class="app-name" style="align-content: center"><b>Cricket Scoreboard - See your team's score live!!</b></div>
       </div>
     </paper-toolbar>
 
@@ -86,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="content">
       <iron-pages attr-for-selected="data-route" selected="{{route}}">
         <section data-route="home">
-          <paper-material elevation="1">
+          <paper-material elevation="1" style="max-width: 400px; max-height: 500px;">
             <score-view-element></score-view-element>
           </paper-material>
         </section>
@@ -95,6 +100,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-material elevation="1">
             <!--<score-element></score-element>-->
             <input-score></input-score>
+          </paper-material>
+        </section>
+
+        <section data-route="fixture">
+          <paper-material elevation="1" style="max-width: 700px;">
+            <!--<score-element></score-element>-->
+            <input-fixture></input-fixture>
           </paper-material>
         </section>
 
@@ -107,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </section>
 
         <section data-route="team">
-          <paper-material elevation="1">
+          <paper-material elevation="1" style="max-width: 700px;">
             <team-element></team-element>
           </paper-material>
         </section>
